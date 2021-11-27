@@ -7,8 +7,3 @@ function getSpeciesByIds(...ids) {
 }
 
 module.exports = getSpeciesByIds;
-
-
-// let x = ["adelson", "adelson", "lima", "adelson"];
-
-// console.log(x.find(e => e === "adelson"));
