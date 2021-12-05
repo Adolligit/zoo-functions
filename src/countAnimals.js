@@ -2,11 +2,10 @@ const data = require('../data/zoo_data');
 
 function countAnimals(animal) {
   if (!animal) {
-    return data.species.reduce((object, specie) => {
-      // código feio por causa do lint
-      const lintFix = object;
-      lintFix[specie.name] = specie.residents.length;
-      return lintFix;
+    return data.species.reduce((acc, specie) => {
+      // Lint da erro se o acumulador for um objeto e seu nome diferente de ACC
+      acc[specie.name] = specie.residents.length;
+      return acc;
     }, {});
   }
 
