@@ -1,14 +1,13 @@
 const data = require('../data/zoo_data');
 
 function countEntrants(entrants) {
-  return entrants.reduce((object, people) => {
-    const x = object; // fix lint
+  return entrants.reduce((acc, people) => {
+    // Lint da erro se o acumulador for um objeto e seu nome diferente de ACC
+    if (people.age >= 50) acc.senior += 1;
+    else if (people.age >= 18) acc.adult += 1;
+    else acc.child += 1;
 
-    if (people.age >= 50) x.senior += 1;
-    else if (people.age >= 18) x.adult += 1;
-    else x.child += 1;
-
-    return x;
+    return acc;
   }, { child: 0, adult: 0, senior: 0 });
 }
 
