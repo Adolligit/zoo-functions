@@ -2,28 +2,26 @@ const data = require('../data/zoo_data');
 
 const { species } = data;
 
-function getAnimalMap(options) {
+function getAnimalMap(options = {}) {
+  const { sex, includeNames, sorted } = options;
   return species.reduce((acc, specie) => {
     // acc: {} <- location: [] <- specie.name: {} <- name.redents []
-    const response = acc[`${specie.location}`]; // verificando existência do atributo.
-    
-    // if (!response) acc[`${specie.location}`] = []; // caso não exista o atributo, crie esta posição e adicione um array
-    
-    if (!options || (options.sex === 'female' && Object.keys(options).length < 2) || options.sorted) {
-      acc[`${specie.location}`].push(specie.name);
+    if (!acc[`${specie.location}`]) acc[`${specie.location}`] = []; // line reduce [eslint]
+    if (includeNames) {
+      const animalNames = specie.residents.filter((resident) => {
+        return (sex) ? sex === resident.sex : resident;
+      }).map(({ name }) => name);
+      acc[`${specie.location}`]
+        .push({ [specie.name]: (sorted ? [...animalNames].sort() : [...animalNames]) });
     } else {
-      const nameResidents = {};
-      
-      nameResidents[`${specie.name}`] = specie.residents.map((resident) => resident.name);
-      acc[`${specie.location}`].push(nameResidents);
+      acc[`${specie.location}`].push(specie.name);
     }
-
     return acc;
   }, {});
 }
 
-console.log();
-console.log(getAnimalMap({ sex: 'female', sorted: true }));
-console.log(getAnimalMap({ includeNames: true }));
+console.log(getAnimalMap({ includeNames: true, sorted: true }));
+// console.log(getAnimalMap({ includeNames: true, sex: 'female' }));
+// console.log(getAnimalMap({ includeNames: true, sex: 'female', sorted: true }));
 
 module.exports = getAnimalMap;
