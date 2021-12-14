@@ -3,14 +3,13 @@ const data = require('../data/zoo_data');
 const { species } = data;
 
 function getAnimalMap(options = {}) {
-  const { sex, includeNames, sorted } = options;
+  const { sex = ['female', 'male'], includeNames, sorted } = options;
   return species.reduce((acc, specie) => {
-    // acc: {} <- location: [] <- specie.name: {} <- name.redents []
     if (!acc[`${specie.location}`]) acc[`${specie.location}`] = []; // line reduce [eslint]
     if (includeNames) {
-      const animalNames = specie.residents.filter((resident) => {
-        return (sex) ? sex === resident.sex : resident;
-      }).map(({ name }) => name);
+      const animalNames = specie.residents
+        .filter((resident) => sex[0].includes(resident.sex[0]))
+        .map(({ name }) => name);
       acc[`${specie.location}`]
         .push({ [specie.name]: (sorted ? [...animalNames].sort() : [...animalNames]) });
     } else {
@@ -19,9 +18,5 @@ function getAnimalMap(options = {}) {
     return acc;
   }, {});
 }
-
-console.log(getAnimalMap({ includeNames: true, sorted: true }));
-// console.log(getAnimalMap({ includeNames: true, sex: 'female' }));
-// console.log(getAnimalMap({ includeNames: true, sex: 'female', sorted: true }));
 
 module.exports = getAnimalMap;
